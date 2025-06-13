@@ -1,10 +1,6 @@
 uvicorn
 Pillow
-typing_extensions
 langchain
-shutil
-typing
-beautifulsoup4
 uvicorn
 langchain-core
 langchain-community
