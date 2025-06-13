@@ -29,7 +29,7 @@ SUMMARY_MODEL = "gpt-3.5-turbo-16k"  # Using 16k context model for summaries
 
 
 
-client = OpenAI(api_key = config.OPENAI_API_KEY)  # for summarisation
+client = OpenAI(api_key = os.getenv("OPENAI_API_KEY"))  # for summarisation
 
 @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10))
 def generate_weighted_summary(posts: List[Dict[str, Any]], weights: List[float]) -> str:
