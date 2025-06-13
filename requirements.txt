@@ -1,0 +1,9 @@
+langchain
+tenacity
+yaml
+openai
+shutil
+typing
+fastapi
+pydantic
+beautifulsoup4
