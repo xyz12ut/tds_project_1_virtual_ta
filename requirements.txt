@@ -7,3 +7,4 @@ typing
 fastapi
 pydantic
 beautifulsoup4
+uvicorn
