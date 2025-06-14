@@ -1,0 +1,3 @@
+[submodule "TDS-Project1-Data"]
+	path = TDS-Project1-Data
+	url = https://github.com/23f3004008/TDS-Project1-Data.git
