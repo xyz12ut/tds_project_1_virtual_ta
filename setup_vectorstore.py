@@ -197,7 +197,7 @@ def create_faculty_post_document(post: Dict[str, Any], source_path: str) -> Docu
 
     
     url_parts = post.get("post_url", "").split("/")
-    topic_url = "/".join(url_parts[:-1])  # Remove last segment (post number)
+    topic_url = "/".join(url_parts[:])  # Remove last segment (post number)
     topic_url = "".join(topic_url)  # Reconstruct topic URL
     topic_url = BASE_URL + topic_url
 
