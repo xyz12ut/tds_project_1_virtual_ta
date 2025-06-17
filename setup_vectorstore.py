@@ -115,7 +115,7 @@ def process_topic_posts(topic_data: Dict[str, Any]) -> Document:
     topic_url = None
     if posts and "post_url" in posts[0]:
         url_parts = posts[0]["post_url"].split("/")
-        topic_url = "/".join(url_parts[:-1])  # Remove last segment (post number)
+        topic_url = "/".join(url_parts[:])  # Remove last segment (post number)
         topic_url = "/".join(topic_url)  # Reconstruct topic URL
         topic_url= BASE_URL + topic_url
     
