@@ -17,4 +17,4 @@ python-dotenv
 beautifulsoup4
 requests
 gdown
-math
+python-math
