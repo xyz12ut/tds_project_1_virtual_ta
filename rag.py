@@ -127,29 +127,40 @@ def retrieve(state: State) -> dict:
         expanded_queries = [question] + query_expander.invoke(question)
         
         # Get documents without immediate filtering
-        
         all_docs = []
         for q in expanded_queries:
-            all_docs.extend(vector_store.similarity_search(q, k=3))
+            # Get more docs than needed since we'll rerank
+            all_docs.extend(vector_store.similarity_search_with_score(q, k=4))
         
-
+        # Rerank based on post number (higher numbers = more priority)
+        def post_number_boost(doc_score_tuple):
+            doc, similarity_score = doc_score_tuple
+            post_number = int(doc.metadata.get("post_number", 0))
+            
+            # Calculate boost - higher post numbers get more boost
+            # Using log scaling to prevent later posts from dominating too much
+            post_boost = 1 + (math.log(post_number + 1) * 0.3)  # Adjust multiplier as needed
+            #post_boost = post_number/1000
+            
+            return similarity_score * post_boost
+        
+        # Sort by combined score
+        reranked_docs = sorted(all_docs, key=post_number_boost, reverse=True)
+        
+        # Deduplicate while preserving order
         retrieved_docs = []
         seen_contents = set()
         
-        for doc in all_docs:
-            # Create a content signature to detect near-duplicates
-            content_hash = hash(doc.page_content[:200])  # First 200 chars as signature
-            
+        for doc, _ in reranked_docs:  # We only need the doc after sorting
+            content_hash = hash(doc.page_content[:200])
             if content_hash not in seen_contents:
                 seen_contents.add(content_hash)
                 retrieved_docs.append(doc)
                 
-                # Stop when we have enough unique content
-                '''
+                # Optional: Early stopping if we have enough
                 if len(retrieved_docs) >= 5:
                     break
-                '''
-
+    
     return {"context": retrieved_docs}
 
 def generate(state: State) -> dict:
